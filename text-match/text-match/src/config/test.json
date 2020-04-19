@@ -1,0 +1,17 @@
+{
+    "model": "TextDssmMlpSimilarityModel",
+    "word_count": 10,
+    "word_size": 500001,
+    "word_embedding_size": 256,
+    "mlp_layers": [256, 128],
+    "batch_size": 8,
+    "epochs": 100,
+    "steps": 8,
+    "dropout": 0.9,
+    "neg_count": 4,
+    "data_type": "pair",
+    "train_data_path": "/home/zhangxilun/workspace/code_trans/text-match/test_data/",
+    "valid_data_path": "/home/zhangxilun/workspace/code_trans/text-match/data/text-cdssm/test/",
+    "save_path": "/home/zhangxilun/workspace/model_save/test.cp.ckpt",
+    "logs": "/home/zhangxilun/workspace/tf_logs/test/"
+}

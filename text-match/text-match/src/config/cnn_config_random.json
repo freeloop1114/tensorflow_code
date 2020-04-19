@@ -1,0 +1,23 @@
+{
+    "name": "text_cnn_subword_random",
+    "model": "TextCnnModel",
+    "word_count": 10,
+    "word_size": 500001,
+    "word_embedding_size": 256,
+    "mlp_layers": [128, 128],
+    "cnn_layers": [
+        [[128, 3, 1], [128, 5, 1]]
+    ],
+    "repeat_count": 5,
+    "batch_size": 128,
+    "train_steps": 5000,
+    "valid_steps": 5000,
+    "epochs": 10,
+    "dropout": 0.9,
+    "neg_count": 4,
+    "data_type": "point",
+    "train_data_path": "/home/zhangxilun/workspace/code_trans/text-match/data/text-cnn-subword-random/train/",
+    "valid_data_path": "/home/zhangxilun/workspace/code_trans/text-match/data/text-cnn-subword-random/test/",
+    "save_path": "/home/zhangxilun/workspace/model_save/",
+    "logs": "/home/zhangxilun/workspace/tf_logs/"
+}
