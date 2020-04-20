@@ -25,27 +25,28 @@ def local_data(path, batch_size, repeat_count, word_count, neg_count = 4, cycle_
                     buffer_output_elements = 1024    
                 )
             )
-    ds = ds.shuffle(10000 * batch_size).batch(batch_size).repeat()
+    ds = ds.shuffle(100 * batch_size).batch(batch_size).repeat()
+    #ds = ds.padded_batch(batch_size, ([None], [None]))
     #ds = ds.prefetch(buffer_size = tf.data.experimental.AUTOTUNE)
     #ds = ds.repeat()
-    it = iter(ds)
-    for i in range(repeat_count):
+    #it = iter(ds)
     #while True:
-        try:
-            label, query, pos_data, neg_data = next(it)
-            features = tuple([query, pos_data, neg_data])
-            yield features, label
-        except Exception as e:
-            it = iter(ds)
-            print('epoch [%d] run out' % (i))
+    #    try:
+    #        label, query, pos_data, neg_data = next(it)
+    #        features = tuple([query, pos_data, neg_data])
+    #        yield features, label
+    #    except Exception as e:
+    #        it = iter(ds)
+    #        print('epoch [%d] run out' % (i))
+    return ds
 
 
 def _text_generator(file_name, word_count, neg_count = 4):
     return tf.data.Dataset.from_generator(
                 _text_handler,
-                (tf.int64, tf.int64, tf.int64, tf.int64),
-                (tf.TensorShape([None]), tf.TensorShape([None]), tf.TensorShape([None]), tf.TensorShape([None])),
-                (file_name, word_count, neg_count)
+                output_types = ({"query": tf.int64, "pos_data": tf.int64, "neg_data": tf.int64}, tf.int64),
+                output_shapes = ({"query": tf.TensorShape([None]), "pos_data": tf.TensorShape([None]), "neg_data": tf.TensorShape([None])}, tf.TensorShape([None])),
+                args = (file_name, word_count, neg_count)
             )
 
 def _text_handler(file_name, word_count, neg_count = 4):
@@ -71,7 +72,8 @@ def _text_handler(file_name, word_count, neg_count = 4):
         #n = random.randint(0, neg_count-1)
         #neg_data = _format_text_value(value[3].split(':')[n], word_count)
         #neg_data = np.array([ _format_text_value(v, word_count) for v in value[3].split(':') ])
-        yield (label, query, pos_data, neg_data)
+        #yield (query, pos_data, neg_data), label
+        yield {"query": query, "pos_data": pos_data, "neg_data": neg_data}, label
 
 def _format_text_value(value, word_count):
     t = np.array([ int(v) for v in value.split(',') ])

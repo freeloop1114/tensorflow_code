@@ -41,11 +41,9 @@ def local_data(path, batch_size, epochs, word_count, cycle_length = 8, sloppy = 
 def _text_generator(file_name, word_count):
     return tf.data.Dataset.from_generator(
                 _text_handler,
-                (tf.int64, tf.int64, tf.int64),
-                (tf.TensorShape([None]), tf.TensorShape([None]), tf.TensorShape([])),
-                #(tf.int64, tf.int64),
-                #(tf.TensorShape([None]), tf.TensorShape([])),
-                (file_name, word_count, word_count)
+                output_types = ({"query": tf.int64, "pos_data": tf.int64}, tf.int64),
+                output_shapes = ({"query": tf.TensorShape([None]), "pos_data": tf.TensorShape([None])}, tf.TensorShape([None])),
+                args = (file_name, word_count, neg_count)
             )
 
 def _text_handler(file_name, query_word_count = 20, doc_word_count = 20):
@@ -63,7 +61,7 @@ def _text_handler(file_name, query_word_count = 20, doc_word_count = 20):
         label = int(value[0])
         query = _format_text_value(str(value[1]), query_word_count)
         data = _format_text_value(str(value[2]), doc_word_count)
-        yield (query, data, label)
+        yield {"query": query, "pos_data": pos_data}, label
 
 def _format_text_value(value, word_count):
     t = np.array([ int(v) for v in value.split(',') ])
