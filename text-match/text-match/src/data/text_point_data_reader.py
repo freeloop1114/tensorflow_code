@@ -29,13 +29,13 @@ def local_data(path, batch_size, epochs, word_count, cycle_length = 8, sloppy = 
     #it = ds.make_one_shot_iterator()
     #label, query, data = it.get_next()
     #label, query, data = next(ds.__iter__())
-    it = iter(ds)
-    while True:
-        query, data, label = next(it)
-        features = (query, data)
-        yield features, label
+    #it = iter(ds)
+    #while True:
+    #    query, data, label = next(it)
+    #    features = (query, data)
+    #    yield features, label
     #return (features, label)
-    #return ds
+    return ds
 
 
 def _text_generator(file_name, word_count):
